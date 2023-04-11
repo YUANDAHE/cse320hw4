@@ -9,7 +9,7 @@
  */
 
 Test(basecode_suite, startup_quit_test) {
-    char *cmd = "echo quit | timeout -s KILL 5s bin/ticker";
+    char *cmd = "timeout -s KILL 5s echo quit | bin/ticker";
     int return_code = WEXITSTATUS(system(cmd));
 
     cr_assert_eq(return_code, EXIT_SUCCESS,
@@ -18,7 +18,7 @@ Test(basecode_suite, startup_quit_test) {
 }
 
 Test(basecode_suite, startup_EOF_test) {
-    char *cmd = "cat /dev/null | timeout -s KILL 5s bin/ticker";
+    char *cmd = "timeout -s KILL 5s cat /dev/null | bin/ticker";
     int return_code = WEXITSTATUS(system(cmd));
 
     cr_assert_eq(return_code, EXIT_SUCCESS,
@@ -27,7 +27,7 @@ Test(basecode_suite, startup_EOF_test) {
 }
 
 Test(basecode_suite, startup_watchers_test) {
-    char *cmd = "(echo watchers; echo quit) | timeout -s KILL 5s bin/ticker > test_output/startup_watchers.out";
+    char *cmd = "timeout -s KILL 5s echo -e \"watchers\nquit\" | bin/ticker > test_output/startup_watchers.out";
     char *cmp = "cmp test_output/startup_watchers.out tests/rsrc/startup_watchers.out";
 
     int return_code = WEXITSTATUS(system(cmd));
