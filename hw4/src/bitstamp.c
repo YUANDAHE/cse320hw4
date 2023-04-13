@@ -35,8 +35,12 @@ WATCHER *bitstamp_watcher_start(WATCHER_TYPE *type, char *args[]) {
     if (pid == 0) {
         close(fd_reading[0]);
         close(fd_writing[1]);
-        dup2(fd_reading[1], 1);
-        dup2(fd_writing[0], 0);
+        if (dup2(fd_reading[1], 1) < 0) {
+            exit(-1);
+        }
+        if (dup2(fd_writing[0], 0) < 0) {
+            exit(-1);
+        }
         execvp(type->argv[0], type->argv);
         return NULL;
     }

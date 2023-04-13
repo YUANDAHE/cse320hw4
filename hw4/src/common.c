@@ -49,7 +49,6 @@ COMMON_WATCHER *create_watcher(int pid, int reading_fd, int writing_fd) {
     watcher->pid = pid;
     watcher->reading_fd = reading_fd;
     watcher->writing_fd = writing_fd;
-    watcher->input = open_memstream(&watcher->input_buf, &watcher->input_size);
 
     fcntl(reading_fd, F_SETFL, O_ASYNC | O_NONBLOCK);
     fcntl(reading_fd, F_SETOWN, getpid());

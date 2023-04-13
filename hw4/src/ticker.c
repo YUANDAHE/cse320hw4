@@ -92,7 +92,18 @@ int ticker(void) {
     }
     
     init_watcher();
-    add_watcher(cli_watcher_start(&watcher_types[0], NULL));
+    WATCHER *watcher = cli_watcher_start(&watcher_types[0], NULL);
+    add_watcher(watcher);
+
+    char buf[1024];
+    int n = read(STDIN_FILENO, buf, 1023);
+    if (n > 0) {
+        buf[n] = 0;
+        WATCHER_TYPE *type = (WATCHER_TYPE *)((COMMON_WATCHER *)watcher)->watcher_type;
+        type->recv(watcher, buf);
+    } else if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
+        return 0;
+    }
     
     while (1) {
         sigset_t set;
