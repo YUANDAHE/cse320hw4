@@ -95,6 +95,8 @@ void remove_watcher(int pid) {
         return;
     }
 
+    close(watcher->reading_fd);
+    close(watcher->writing_fd);
     for (int i = 0; i < sizeof(watcher->args)/sizeof(char *); i++) {
         if (watcher->args[i] == NULL) {
             break;
